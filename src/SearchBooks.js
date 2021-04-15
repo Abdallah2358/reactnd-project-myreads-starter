@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import * as BooksAPI from './BooksAPI';
 import terms from './terms';
 import SearchList from './SearchList';
+import { Link } from 'react-router-dom';
+
 class SearchBooks extends Component {
   state = {
     query: '',
@@ -55,11 +57,11 @@ class SearchBooks extends Component {
 
   render() {
     const { query, books  } = this.state;
-    const { returnToList , existingBooks} = this.props;
+    const {  existingBooks} = this.props;
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <button className="close-search" onClick={returnToList}>Close</button>
+          <Link className="close-search" to = '/'>Close</Link>
           <div className="search-books-input-wrapper">
             {/*
                   NOTES: The search from BooksAPI is limited to a particular set of search terms.
