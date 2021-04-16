@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import * as BooksAPI from './BooksAPI';
-import terms from './terms';
+
 import SearchList from './SearchList';
 import { Link } from 'react-router-dom';
 
@@ -10,18 +10,17 @@ class SearchBooks extends Component {
     Queries: [],
     books: [],
     notUpdated: true,
-    terms: terms ,
-    existingBooksID:{
+    existingBooksID: {
       wantToRead: [],
       currentlyReading: [],
       read: [],
     }
   }
-  componentDidMount(){
-   // this.fillBooksIDs();
+  componentDidMount() {
+    // this.fillBooksIDs();
   }
 
- 
+
 
   componentDidUpdate() {
     if (!this.state.notUpdated) {
@@ -36,12 +35,12 @@ class SearchBooks extends Component {
     this.setState(() => ({
       query: query,
       notUpdated: false,
-      Queries: terms.filter(
-        (t) => {
-          // console.log(t);
-          return t.includes(query.trim())
-        }
-      )
+      /*  Queries: terms.filter(
+         (t) => {
+           // console.log(t);
+           return t.includes(query.trim())
+         }
+       ) */
     }))
   };
 
@@ -49,7 +48,7 @@ class SearchBooks extends Component {
 
 
   render() {
-    const { query, books ,existingBooksID } = this.state;
+    const { query, books, existingBooksID } = this.state;
     const { existingBooks } = this.props;
     return (
       <div className="search-books">
@@ -64,7 +63,7 @@ class SearchBooks extends Component {
                   However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                   you don't find a specific author or title. Every search is limited by search terms.
                 */}
-                {console.log('in render searchBooks' ,existingBooks)}
+            {console.log('in render searchBooks', existingBooks)}
             <input
               type="text"
               placeholder="Search by title or author"
@@ -80,7 +79,7 @@ class SearchBooks extends Component {
 
         <div className="search-books-results">
           <ol className="books-grid">
-            {(this.state.query !== '') && (<SearchList books={books}  existingBooksID ={existingBooksID} existingBooks={existingBooks} moveBook={this.props.moveBook} />)}
+            {(this.state.query !== '') && (<SearchList books={books} existingBooksID={existingBooksID} existingBooks={existingBooks} moveBook={this.props.moveBook} />)}
 
           </ol>
         </div>
@@ -89,12 +88,11 @@ class SearchBooks extends Component {
   }
 
 
-
   searchAPI() {
-    BooksAPI.search(this.state.Queries[0]).then(
+    BooksAPI.search(this.state.query.trim()).then(
       (bookss) => {
         console.log("from api", bookss);
-        if (bookss) {
+        if (!bookss.error) {
           this.setState(
             () => ({ books: bookss, notUpdated: true })
           );
@@ -107,6 +105,7 @@ class SearchBooks extends Component {
     );
   }
 
+  
   fillBooksIDs() {
     this.setState(
 

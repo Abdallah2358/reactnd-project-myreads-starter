@@ -5,17 +5,20 @@ class SearchList extends Component {
     render() {
         const { books, moveBook } = this.props;
 
+        if (books) {
+            console.log("THE ERROR" , books);
+            return (books.map(
+                (book) => {
 
-        return (books.map(
-            (book) => {
+                    return (
+                        <li key={book.id}>
+                            <Book book={book} moveBook={moveBook} shelf={this.chooseBookShelf(book)} />
+                        </li>
+                    )
+                }
+            ));
+        }
 
-                return (
-                    <li key={book.id}>
-                        <Book book={book} moveBook={moveBook} shelf={this.chooseBookShelf(book)} />
-                    </li>
-                )
-            }
-        ));
     }
 
     chooseBookShelf(book) {
@@ -42,12 +45,12 @@ class SearchList extends Component {
                 return shelf;
             }
         });
-        if (shelf ==='') {
+        if (shelf === '') {
             shelf = 'none'
             console.log('shelf sent', shelf);
             return shelf;
         }
-       
+
     }
 
 }
