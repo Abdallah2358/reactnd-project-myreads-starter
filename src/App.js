@@ -88,7 +88,7 @@ class BooksApp extends React.Component {
 
     return (
       <div className="app">
-
+        
         <Route exact path='/'
           render={
             () => (
@@ -99,6 +99,7 @@ class BooksApp extends React.Component {
         <Route exact path='/search'
           render={
             () => (
+              
               <SearchBooks moveBook={this.moveBook} existingBooks={this.state.books} returnToList={this.returnFromSearch} />
             )
           }
