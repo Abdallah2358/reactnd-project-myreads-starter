@@ -16,34 +16,12 @@ class SearchBooks extends Component {
       read: [],
     }
   }
-  componentDidMount() {
-    // this.fillBooksIDs();
-  }
-
-
 
   componentDidUpdate() {
     if (!this.state.notUpdated) {
-      //  console.log( 'query sent ' ,this.state.Queries[0]);
       this.searchAPI();
     }
   }
-
-  updateQuery = (query) => {
-    //remember set state need ()=>({}) not ()=> {} take care 
-
-    this.setState(() => ({
-      query: query,
-      notUpdated: false,
-      /*  Queries: terms.filter(
-         (t) => {
-           // console.log(t);
-           return t.includes(query.trim())
-         }
-       ) */
-    }))
-  };
-
 
 
 
@@ -55,15 +33,6 @@ class SearchBooks extends Component {
         <div className="search-books-bar">
           <Link className="close-search" to='/'>Close</Link>
           <div className="search-books-input-wrapper">
-            {/*
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
-            {console.log('in render searchBooks', existingBooks)}
             <input
               type="text"
               placeholder="Search by title or author"
@@ -73,61 +42,51 @@ class SearchBooks extends Component {
               */
               onChange={(event) => this.updateQuery(event.target.value)}
             />
-
           </div>
         </div>
-
         <div className="search-books-results">
           <ol className="books-grid">
-            {(this.state.query !== '') && (<SearchList books={books} existingBooksID={existingBooksID} existingBooks={existingBooks} moveBook={this.props.moveBook} />)}
-
+            {
+              (this.state.query !== '')
+              &&
+              (<SearchList
+                books={books}
+                existingBooksID={existingBooksID}
+                existingBooks={existingBooks}
+                moveBook={this.props.moveBook}
+              />)
+            }
           </ol>
         </div>
       </div>
     )
   }
 
-
+  updateQuery = (query) => {
+    //updates the state query 
+    //remember set state need ()=>({}) not ()=> {} take care 
+    this.setState(() => ({
+      query: query,
+      notUpdated: false,
+    }))
+  };
   searchAPI() {
+    //api call and ui update in search
     BooksAPI.search(this.state.query.trim()).then(
-      (bookss) => {
-        console.log("from api", bookss);
-        if (!bookss.error) {
+      (Books) => {
+        if (!Books.error) {
+          //if no error update ui with received books
           this.setState(
-            () => ({ books: bookss, notUpdated: true })
+            () => ({ books: Books, notUpdated: true })
           );
         } else {
           this.setState(
+            //if the text does not match or error receive  clear ui
             () => ({ books: [], notUpdated: true })
           );
         }
       }
     );
   }
-
-  
-  fillBooksIDs() {
-    this.setState(
-
-      (currentState) => {
-        const Books = { wantToRead: [], currentlyReading: [], read: [] };
-        this.props.existingBooks.wantToRead.forEach(book => {
-          if (book.id) {
-            Books.wantToRead.id.push(book.id);
-          }
-
-        });;
-        this.props.existingBooks.currentlyReading.forEach(book => {
-          Books.currentlyReading.id.push(book.id);
-        });;
-        this.props.existingBooks.read.forEach(book => {
-          Books.read.id.push(book.id);
-        });;
-        console.log('books', this.props.existingBooks);
-        return ({ existingBooksID: Books });
-      }
-    );
-  }
 }
-
 export default SearchBooks;

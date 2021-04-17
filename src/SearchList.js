@@ -4,9 +4,8 @@ class SearchList extends Component {
     state = { existingBooks: this.props.existingBooks }
     render() {
         const { books, moveBook } = this.props;
-
         if (books) {
-            console.log("THE ERROR" , books);
+            console.log("THE ERROR", books);
             return (books.map(
                 (book) => {
 
@@ -23,36 +22,43 @@ class SearchList extends Component {
 
     chooseBookShelf(book) {
         const { existingBooks } = this.state;
-        let shelf = ''
+        for (const boook of existingBooks.wantToRead) {
+            if (book.id === boook.id)
+                return 'wantToRead';
+        }
+        for (const boook of existingBooks.currentlyReading) {
+            if (book.id === boook.id)
+                return 'currentlyReading';
+        }
+        for (const boook of existingBooks.read) {
+            if (book.id === boook.id)
+                return 'read';
+        }
+        return 'none';
+    }
+    choseBookself(book) {
+        //same as above just practicing .foreach
+        const { existingBooks } = this.state;
+        let shelf = '';
         existingBooks.wantToRead.forEach(boook => {
-            if (book.id === boook.id) {
-                shelf = 'wantToRead'
-                console.log('shelf sent', shelf);
-                return shelf;
-            }
+            if (book.id === boook.id)
+                return shelf = 'wantToRead';
         });
         existingBooks.currentlyReading.forEach(boook => {
-            if (book.id === boook.id) {
-                shelf = 'currentlyReading'
-                console.log('shelf sent', shelf);
-                return shelf;
-            }
+            if (book.id === boook.id)
+                return shelf = 'currentlyReading';
         });
-        existingBooks.read.forEach(boook => {
-            if (book.id === boook.id) {
-                shelf = 'read'
-                console.log('shelf sent', shelf);
-                return shelf;
-            }
+        existingBooks.read.forEach(
+            boook => {
+            if (book.id === boook.id)
+                return shelf = 'read';
         });
-        if (shelf === '') {
-            shelf = 'none'
-            console.log('shelf sent', shelf);
+        if (shelf !== '') {
             return shelf;
+        } else {
+            return 'none';
         }
-
     }
-
 }
 
 export default SearchList;
